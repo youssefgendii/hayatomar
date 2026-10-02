@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e5">
+  <title>Omar &amp; Hayat | Engagement Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Noto+Naskh+Arabic:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f0e5;
+      --paper-light: #fbf8ef;
+      --green: #315c38;
+      --green-soft: #6e8d68;
+      --green-pale: #dce3d1;
+      --ink: #26372b;
+      --brass: #aa8952;
+      --rose: #b87870;
+      --line: rgba(49, 92, 56, .34);
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --script: "Great Vibes", cursive;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image: repeating-linear-gradient(56deg, rgba(93, 82, 57, .025) 0 1px, transparent 1px 5px), repeating-linear-gradient(-56deg, rgba(255, 255, 255, .2) 0 1px, transparent 1px 7px);
+      font-family: var(--serif);
+    }
+
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .leaf-frame {
+      position: fixed;
+      z-index: 4;
+      inset: 0;
+      pointer-events: none;
+      opacity: .88;
+    }
+
+    .leaf-corner {
+      position: absolute;
+      width: clamp(74px, 16vw, 220px);
+      height: clamp(130px, 26vh, 340px);
+      color: var(--green-soft);
+    }
+
+    .leaf-corner.top-left { top: 0; left: 0; }
+    .leaf-corner.top-right { top: 0; right: 0; transform: scaleX(-1); }
+    .leaf-corner.bottom-left { bottom: 0; left: 0; transform: scaleY(-1); }
+    .leaf-corner.bottom-right { bottom: 0; right: 0; transform: scale(-1); }
+
+    .leaf-corner path, .leaf-corner ellipse {
+      fill: rgba(142, 171, 129, .3);
+      stroke: currentColor;
+      stroke-width: 1.25;
+    }
+
+    .leaf-corner .stem { fill: none; stroke-width: 1.4; }
+    .leaf-corner .berry { fill: var(--green-soft); stroke: none; }
+
+    .confetti { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .confetti i { position: absolute; width: 8px; height: 12px; border-radius: 80% 10% 80% 10%; background: #a7c39a; opacity: .45; transform: rotate(32deg); animation: drift 12s ease-in-out infinite alternate; }
+    .confetti i:nth-child(1) { left: 16%; top: 29%; }
+    .confetti i:nth-child(2) { left: 80%; top: 34%; animation-delay: -3s; }
+    .confetti i:nth-child(3) { left: 24%; top: 76%; animation-delay: -7s; }
+    .confetti i:nth-child(4) { left: 72%; top: 82%; animation-delay: -5s; }
+    .confetti i:nth-child(5) { left: 91%; top: 58%; animation-delay: -9s; }
+    @keyframes drift { to { transform: translate3d(12px, 18px, 0) rotate(95deg); } }
+
+    .cover {
+      position: fixed;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(244, 240, 229, .72);
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+
+    .cover.is-open { opacity: 0; visibility: hidden; }
+
+    .open-card {
+      position: relative;
+      width: min(100%, 420px);
+      min-height: 530px;
+      padding: 38px 32px 28px;
+      border: 1px solid var(--line);
+      outline: 1px solid rgba(170, 137, 82, .5);
+      outline-offset: 7px;
+      background: rgba(251, 248, 239, .82);
+      color: var(--green);
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 24px 60px rgba(52, 67, 46, .12);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .open-card:hover { transform: translateY(-4px); box-shadow: 0 30px 70px rgba(52, 67, 46, .16); }
+    .open-card:focus-visible, .action:focus-visible, .rsvp-toggle:focus-visible, .dialog-close:focus-visible { outline: 3px solid var(--brass); outline-offset: 4px; }
+
+    .seal {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 28px;
+      border: 1px solid var(--green-soft);
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 27px;
+      line-height: 1;
+    }
+
+    .cover-kicker, .eyebrow, .date-label, .venue-label {
+      margin: 0;
+      color: var(--green-soft);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .cover-invite { margin: 17px 0 4px; font-size: 22px; font-style: italic; letter-spacing: .09em; }
+    .cover-names { margin: 2px 0; font-family: var(--script); font-size: clamp(54px, 14vw, 74px); line-height: 1.05; }
+    .cover-amp { margin: -3px 0; color: var(--green-soft); font-family: var(--script); font-size: 38px; }
+    .cover-note { margin: 18px 0 28px; font-size: 17px; font-style: italic; letter-spacing: .09em; }
+    .cover-open { display: inline-flex; align-items: center; gap: 10px; border-top: 1px solid var(--line); padding-top: 15px; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; }
+
+    main { position: relative; z-index: 1; width: min(100% - 34px, 920px); margin: 0 auto; padding: 55px 0 90px; text-align: center; }
+    .invitation { opacity: 0; transform: translateY(20px); transition: opacity .8s ease .25s, transform .8s ease .25s; }
+    .invitation.is-visible { opacity: 1; transform: none; }
+    .invocation { margin: 0 0 21px; color: var(--green); font-family: "Noto Naskh Arabic", serif; font-size: clamp(27px, 5vw, 44px); }
+    .intro { margin: 0; color: var(--green-soft); font-size: clamp(18px, 3vw, 26px); font-style: italic; letter-spacing: .07em; }
+    h1 { margin: 5px 0 20px; color: var(--green); font-size: clamp(44px, 10vw, 92px); font-weight: 600; letter-spacing: .13em; line-height: 1; }
+    .stars { display: flex; justify-content: center; gap: 30px; margin: 20px 0 6px; color: var(--brass); font-size: 17px; }
+    .names { display: grid; justify-items: center; margin: 0 auto; color: var(--green); font-family: var(--script); font-size: clamp(78px, 17vw, 142px); line-height: .94; }
+    .names .amp { margin: -2px 0 0; color: var(--green-soft); font-size: .62em; line-height: .82; }
+
+    .monogram {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: clamp(190px, 48vw, 286px);
+      aspect-ratio: 1;
+      margin: 36px auto 20px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      background: radial-gradient(circle at 36% 30%, rgba(255,255,255,.72), transparent 55%), linear-gradient(145deg, #eee8d6, #e4e7d7 55%, #eadbc9);
+      box-shadow: inset 0 0 0 7px rgba(251, 248, 239, .55), 0 10px 28px rgba(49, 92, 56, .1);
+      color: var(--green);
+    }
+
+    .monogram::before, .monogram::after { position: absolute; top: 50%; width: 24%; height: 1px; background: var(--line); content: ""; }
+    .monogram::before { right: calc(100% + 20px); }
+    .monogram::after { left: calc(100% + 20px); }
+    .monogram-initials { font-family: var(--script); font-size: clamp(68px, 14vw, 100px); line-height: 1; }
+    .monogram-heart { position: absolute; top: 22%; right: 23%; color: var(--rose); font-size: 18px; }
+    .under-caption { margin: 0; color: var(--green-soft); font-size: 20px; font-style: italic; letter-spacing: .12em; }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: clamp(12px, 5vw, 45px);
+      width: min(100%, 650px);
+      margin: 28px auto 37px;
+      padding: 18px 14px 14px;
+      border: 1px solid var(--line);
+      background: rgba(251, 248, 239, .35);
+      color: var(--green);
+    }
+
+    .count-part { min-width: 48px; }
+    .count-number { display: block; font-size: clamp(37px, 8vw, 65px); font-weight: 500; line-height: .92; font-variant-numeric: tabular-nums; }
+    .count-unit { display: block; margin-top: 9px; color: var(--green-soft); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+    .count-dot { align-self: center; color: var(--brass); font-size: 23px; }
+
+    .details { margin: 0 auto; color: var(--green); }
+    .date-label { color: var(--brass); }
+    .event-date { margin: 4px 0 0; font-size: clamp(32px, 6vw, 49px); font-weight: 500; }
+    .detail-rule { width: 80px; margin: 19px auto; border: 0; border-top: 1px solid var(--line); }
+    .event-time { margin: 0 0 9px; font-size: 15px; letter-spacing: .2em; }
+    .venue-name { margin: 0; font-size: clamp(24px, 5vw, 35px); font-weight: 600; }
+    .venue-address { margin: 2px 0 15px; color: #596958; font-size: 18px; font-style: italic; }
+    .map-link { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: 16px; text-decoration-color: var(--brass); text-underline-offset: 4px; }
+    .map-link svg { width: 18px; height: 18px; }
+
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 11px; margin: 31px auto 40px; }
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 45px;
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      background: rgba(251, 248, 239, .55);
+      color: var(--green);
+      cursor: pointer;
+      font-size: 15px;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .action:hover { transform: translateY(-2px); border-color: var(--green-soft); background: var(--paper-light); }
+    .action .icon { color: var(--brass); font-size: 18px; }
+
+    .rsvp-section { width: min(100%, 600px); margin: 0 auto; text-align: left; }
+    .rsvp-toggle {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      background: rgba(251, 248, 239, .45);
+      color: var(--green);
+      cursor: pointer;
+      text-align: left;
+    }
+    .rsvp-toggle strong { font-size: 18px; font-weight: 600; }
+    .rsvp-toggle span:nth-child(2) { margin-left: 12px; color: #667265; font-size: 16px; font-style: italic; }
+    .rsvp-toggle .chevron { margin-left: auto; padding-left: 14px; color: var(--brass); font-size: 19px; transition: transform .2s ease; }
+    .rsvp-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+    .rsvp-panel { display: none; padding: 25px 22px 22px; border: 1px solid var(--line); border-top: 0; background: rgba(251, 248, 239, .58); }
+    .rsvp-panel.is-open { display: block; animation: slide-in .25s ease both; }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: none; } }
+    .form-title { margin: 0; color: var(--green); font-size: 30px; font-weight: 500; text-align: center; }
+    .form-subtitle { margin: 3px 0 19px; color: var(--green-soft); font-size: 17px; font-style: italic; text-align: center; }
+    .choice-row { display: flex; gap: 10px; margin-bottom: 18px; }
+    .choice {
+      flex: 1;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+    }
+    .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fffdf6; }
+    .field { display: grid; gap: 6px; margin: 13px 0; color: var(--green); font-size: 15px; }
+    .field input, .field textarea { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid rgba(49, 92, 56, .28); border-radius: 0; background: rgba(255, 255, 255, .48); color: var(--ink); }
+    .field textarea { min-height: 78px; resize: vertical; }
+    .field input:focus, .field textarea:focus { outline: 2px solid var(--brass); outline-offset: 1px; }
+    .submit-button { display: block; width: 100%; margin-top: 17px; }
+    .form-status { min-height: 22px; margin: 12px 0 0; color: var(--green); font-size: 15px; text-align: center; }
+
+    footer { margin: 45px 0 0; color: var(--green-soft); font-family: var(--script); font-size: 32px; }
+    .footer-sprig { color: var(--brass); font-family: var(--serif); font-size: 14px; letter-spacing: .45em; }
+
+    dialog {
+      width: min(calc(100% - 30px), 470px);
+      max-height: min(85vh, 720px);
+      padding: 29px 26px 24px;
+      border: 1px solid var(--line);
+      background-color: var(--paper-light);
+      background-image: repeating-linear-gradient(56deg, rgba(93, 82, 57, .025) 0 1px, transparent 1px 5px);
+      color: var(--ink);
+      box-shadow: 0 20px 70px rgba(30, 43, 32, .25);
+    }
+    dialog::backdrop { background: rgba(26, 39, 29, .48); backdrop-filter: blur(3px); }
+    .dialog-head { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+    .dialog-title { margin: 0; color: var(--green); font-size: 33px; font-weight: 500; }
+    .dialog-close { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line); background: transparent; color: var(--green); cursor: pointer; font-size: 20px; }
+    .dialog-copy { margin: 4px 0 20px; color: var(--green-soft); font-style: italic; }
+    .dialog-form .action { width: 100%; }
+
+    @media (max-width: 540px) {
+      main { width: min(100% - 26px, 920px); padding-top: 42px; padding-bottom: 55px; }
+      .open-card { min-height: 480px; padding-inline: 23px; }
+      h1 { letter-spacing: .08em; }
+      .countdown { gap: 10px; padding-inline: 8px; }
+      .count-part { min-width: 42px; }
+      .count-unit { font-size: 10px; letter-spacing: .1em; }
+      .rsvp-toggle { flex-wrap: wrap; gap: 3px; }
+      .rsvp-toggle span:nth-child(2) { margin-left: 0; }
+      .rsvp-toggle .chevron { margin-left: auto; }
+      .leaf-corner { opacity: .75; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="leaf-frame" aria-hidden="true">
+    <svg class="leaf-corner top-left" viewBox="0 0 180 290" preserveAspectRatio="none">
+      <path class="stem" d="M4 4 C64 46 117 91 145 175 M4 4 C28 66 28 126 24 192 M4 4 C54 116 87 195 91 286"/>
+      <path d="M50 43 C72 25 90 29 99 53 C76 65 61 61 50 43Z"/><path d="M83 84 C106 65 123 72 129 96 C105 106 91 101 83 84Z"/>
+      <path d="M119 137 C140 124 154 132 156 155 C135 163 124 156 119 137Z"/><path d="M135 174 C155 163 166 172 164 192 C145 199 136 191 135 174Z"/>
+      <path d="M9 72 C-3 89 1 108 16 119 C28 99 25 83 9 72Z"/><path d="M15 127 C1 146 5 164 21 174 C32 154 29 138 15 127Z"/>
+      <ellipse cx="25" cy="194" rx="9" ry="13"/><circle class="berry" cx="25" cy="194" r="3.5"/>
+      <ellipse cx="145" cy="175" rx="12" ry="16" fill="none"/><circle class="berry" cx="145" cy="175" r="4"/>
+    </svg>
+    <svg class="leaf-corner top-right" viewBox="0 0 180 290" preserveAspectRatio="none">
+      <path class="stem" d="M4 4 C64 46 117 91 145 175 M4 4 C28 66 28 126 24 192 M4 4 C54 116 87 195 91 286"/>
+      <path d="M50 43 C72 25 90 29 99 53 C76 65 61 61 50 43Z"/><path d="M83 84 C106 65 123 72 129 96 C105 106 91 101 83 84Z"/>
+      <path d="M119 137 C140 124 154 132 156 155 C135 163 124 156 119 137Z"/><path d="M135 174 C155 163 166 172 164 192 C145 199 136 191 135 174Z"/>
+      <path d="M9 72 C-3 89 1 108 16 119 C28 99 25 83 9 72Z"/><path d="M15 127 C1 146 5 164 21 174 C32 154 29 138 15 127Z"/>
+      <ellipse cx="25" cy="194" rx="9" ry="13"/><circle class="berry" cx="25" cy="194" r="3.5"/>
+      <ellipse cx="145" cy="175" rx="12" ry="16" fill="none"/><circle class="berry" cx="145" cy="175" r="4"/>
+    </svg>
+    <svg class="leaf-corner bottom-left" viewBox="0 0 180 290" preserveAspectRatio="none">
+      <path class="stem" d="M4 4 C64 46 117 91 145 175 M4 4 C28 66 28 126 24 192 M4 4 C54 116 87 195 91 286"/>
+      <path d="M50 43 C72 25 90 29 99 53 C76 65 61 61 50 43Z"/><path d="M83 84 C106 65 123 72 129 96 C105 106 91 101 83 84Z"/>
+      <path d="M119 137 C140 124 154 132 156 155 C135 163 124 156 119 137Z"/><path d="M135 174 C155 163 166 172 164 192 C145 199 136 191 135 174Z"/>
+      <path d="M9 72 C-3 89 1 108 16 119 C28 99 25 83 9 72Z"/><path d="M15 127 C1 146 5 164 21 174 C32 154 29 138 15 127Z"/>
+      <ellipse cx="25" cy="194" rx="9" ry="13"/><circle class="berry" cx="25" cy="194" r="3.5"/>
+      <ellipse cx="145" cy="175" rx="12" ry="16" fill="none"/><circle class="berry" cx="145" cy="175" r="4"/>
+    </svg>
+    <svg class="leaf-corner bottom-right" viewBox="0 0 180 290" preserveAspectRatio="none">
+      <path class="stem" d="M4 4 C64 46 117 91 145 175 M4 4 C28 66 28 126 24 192 M4 4 C54 116 87 195 91 286"/>
+      <path d="M50 43 C72 25 90 29 99 53 C76 65 61 61 50 43Z"/><path d="M83 84 C106 65 123 72 129 96 C105 106 91 101 83 84Z"/>
+      <path d="M119 137 C140 124 154 132 156 155 C135 163 124 156 119 137Z"/><path d="M135 174 C155 163 166 172 164 192 C145 199 136 191 135 174Z"/>
+      <path d="M9 72 C-3 89 1 108 16 119 C28 99 25 83 9 72Z"/><path d="M15 127 C1 146 5 164 21 174 C32 154 29 138 15 127Z"/>
+      <ellipse cx="25" cy="194" rx="9" ry="13"/><circle class="berry" cx="25" cy="194" r="3.5"/>
+      <ellipse cx="145" cy="175" rx="12" ry="16" fill="none"/><circle class="berry" cx="145" cy="175" r="4"/>
+    </svg>
+  </div>
+  <div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <section class="cover" id="cover" aria-label="Invitation cover">
+    <button class="open-card" id="openInvitation" type="button" aria-label="Open Omar and Hayat's engagement invitation">
+      <span class="seal" aria-hidden="true">O <span style="color:var(--brass)">&amp;</span> H</span>
+      <p class="cover-kicker">A day made brighter by you</p>
+      <p class="cover-invite">You are warmly invited</p>
+      <p class="cover-names">Omar</p>
+      <p class="cover-amp">&amp;</p>
+      <p class="cover-names">Hayat</p>
+      <p class="cover-note">to celebrate their engagement</p>
+      <span class="cover-open">✦ <span>Open invitation</span> ✦</span>
+    </button>
+  </section>
+
+  <main class="invitation" id="invitation" aria-hidden="true" inert>
+    <p class="invocation" lang="ar" dir="rtl">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+    <p class="intro">With joy in our hearts, we invite you to celebrate</p>
+    <h1>ENGAGEMENT</h1>
+    <div class="stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></div>
+    <div class="names" aria-label="Omar and Hayat"><span>Omar</span><span class="amp">&amp;</span><span>Hayat</span></div>
+    <div class="monogram" aria-hidden="true"><span class="monogram-initials">O &amp; H</span><span class="monogram-heart">♥</span></div>
+    <p class="under-caption">are getting engaged</p>
+
+    <div class="countdown" aria-label="Countdown to the engagement">
+      <div class="count-part"><span class="count-number" id="days">000</span><span class="count-unit">Days</span></div>
+      <span class="count-dot" aria-hidden="true">·</span>
+      <div class="count-part"><span class="count-number" id="hours">00</span><span class="count-unit">Hours</span></div>
+      <span class="count-dot" aria-hidden="true">·</span>
+      <div class="count-part"><span class="count-number" id="minutes">00</span><span class="count-unit">Minutes</span></div>
+      <span class="count-dot" aria-hidden="true">·</span>
+      <div class="count-part"><span class="count-number" id="seconds">00</span><span class="count-unit">Seconds</span></div>
+    </div>
+
+    <section class="details" aria-label="Event details">
+      <p class="date-label">Save the date</p>
+      <p class="event-date">15 <span style="color:var(--brass)">·</span> October <span style="color:var(--brass)">·</span> 2026</p>
+      <hr class="detail-rule">
+      <p class="event-time">THURSDAY <span style="color:var(--brass)">·</span> 6:00 PM</p>
+      <p class="venue-label">Join us at</p>
+      <p class="venue-name">Motel King Mariout</p>
+      <p class="venue-address">King Mariout, Egypt</p>
+      <a class="map-link" href="https://maps.google.com/?q=Motel+King+Mariout" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Open in Google Maps
+      </a>
+    </section>
+
+    <div class="actions" aria-label="Invitation actions">
+      <button class="action" id="calendarButton" type="button"><span class="icon" aria-hidden="true">▦</span>Add to calendar</button>
+      <button class="action" type="button" data-dialog="songDialog"><span class="icon" aria-hidden="true">♫</span>Suggest a song</button>
+      <button class="action" type="button" data-dialog="messageDialog"><span class="icon" aria-hidden="true">✦</span>Leave a message</button>
+      <button class="action" type="button" data-dialog="guestbookDialog"><span class="icon" aria-hidden="true">✒</span>Sign the guestbook</button>
+    </div>
+
+    <section class="rsvp-section" aria-label="RSVP">
+      <button class="rsvp-toggle" id="rsvpToggle" type="button" aria-expanded="false" aria-controls="rsvpPanel">
+        <strong>RSVP</strong><span>Let us know you're coming</span><span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="rsvp-panel" id="rsvpPanel">
+        <h2 class="form-title">RSVP</h2>
+        <p class="form-subtitle">Will you celebrate with us?</p>
+        <form id="rsvpForm">
+          <div class="choice-row" role="group" aria-label="Attendance">
+            <button class="choice" type="button" data-rsvp="yes" aria-pressed="false">✓ Yes, I'll be there</button>
+            <button class="choice" type="button" data-rsvp="no" aria-pressed="false">♡ Can't make it</button>
+          </div>
+          <input type="hidden" id="attendance" value="">
+          <label class="field">Your name<input name="name" autocomplete="name" placeholder="Your full name" required></label>
+          <div class="field"><span>Bringing a guest?</span><div class="choice-row" role="group" aria-label="Plus one"><button class="choice" type="button" data-plus="yes" aria-pressed="false">Yes</button><button class="choice" type="button" data-plus="no" aria-pressed="false">No</button></div></div>
+          <input type="hidden" id="plusOne" value="">
+          <label class="field">A note for us (optional)<textarea name="note" placeholder="Anything you'd like us to know..."></textarea></label>
+          <button class="action submit-button" type="submit">Send RSVP</button>
+          <p class="form-status" id="rsvpStatus" role="status"></p>
+        </form>
+      </div>
+    </section>
+    <footer><span class="footer-sprig">✦ &nbsp; ✧ &nbsp; ✦</span><br>With love, Omar &amp; Hayat</footer>
+  </main>
+
+  <dialog id="songDialog" aria-labelledby="songTitle">
+    <div class="dialog-head"><h2 class="dialog-title" id="songTitle">Suggest a song</h2><button class="dialog-close" type="button" aria-label="Close">×</button></div>
+    <p class="dialog-copy">What should we hear on our special day?</p>
+    <form class="dialog-form" data-local-form="song">
+      <label class="field">Song title<input name="song" placeholder="Song title" required></label>
+      <label class="field">Artist<input name="artist" placeholder="Artist" required></label>
+      <button class="action" type="submit">Send suggestion</button><p class="form-status" role="status"></p>
+    </form>
+  </dialog>
+  <dialog id="messageDialog" aria-labelledby="messageTitle">
+    <div class="dialog-head"><h2 class="dialog-title" id="messageTitle">Leave a message</h2><button class="dialog-close" type="button" aria-label="Close">×</button></div>
+    <p class="dialog-copy">Share a wish for Omar and Hayat.</p>
+    <form class="dialog-form" data-local-form="message">
+      <label class="field">Your name<input name="name" placeholder="Your name" required></label>
+      <label class="field">Your message<textarea name="message" placeholder="Write your wishes..." required></textarea></label>
+      <button class="action" type="submit">Leave message</button><p class="form-status" role="status"></p>
+    </form>
+  </dialog>
+  <dialog id="guestbookDialog" aria-labelledby="guestbookTitle">
+    <div class="dialog-head"><h2 class="dialog-title" id="guestbookTitle">The guestbook</h2><button class="dialog-close" type="button" aria-label="Close">×</button></div>
+    <p class="dialog-copy">Leave your name in our celebration book.</p>
+    <form class="dialog-form" data-local-form="guestbook">
+      <label class="field">Your name<input name="name" placeholder="Your name" required></label>
+      <button class="action" type="submit">Sign the guestbook</button><p class="form-status" role="status"></p>
+    </form>
+  </dialog>
+
+  <script>
+    const eventDate = new Date(Date.UTC(2026, 9, 15, 15, 0, 0));
+    const cover = document.getElementById('cover');
+    const invitation = document.getElementById('invitation');
+
+    document.getElementById('openInvitation').addEventListener('click', () => {
+      cover.classList.add('is-open');
+      invitation.classList.add('is-visible');
+      invitation.setAttribute('aria-hidden', 'false');
+      invitation.removeAttribute('inert');
+      window.setTimeout(() => cover.remove(), 900);
+    });
+
+    function updateCountdown() {
+      const remaining = Math.max(0, eventDate.getTime() - Date.now());
+      const totalSeconds = Math.floor(remaining / 1000);
+      document.getElementById('days').textContent = String(Math.floor(totalSeconds / 86400)).padStart(3, '0');
+      document.getElementById('hours').textContent = String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(totalSeconds % 60).padStart(2, '0');
+    }
+    updateCountdown();
+    window.setInterval(updateCountdown, 1000);
+
+    document.getElementById('calendarButton').addEventListener('click', () => {
+      const calendar = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Omar and Hayat//Engagement Invitation//EN',
+        'BEGIN:VEVENT', 'UID:omar-hayat-engagement-20261015@invitation.local',
+        'DTSTAMP:20260101T000000Z', 'DTSTART:20261015T150000Z', 'DTEND:20261015T190000Z',
+        'SUMMARY:Omar & Hayat - Engagement Celebration', 'LOCATION:Motel King Mariout, King Mariout, Egypt',
+        'DESCRIPTION:Celebrate the engagement of Omar and Hayat.', 'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      const file = new Blob([calendar], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = 'omar-and-hayat-engagement.ics';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+
+    const rsvpToggle = document.getElementById('rsvpToggle');
+    const rsvpPanel = document.getElementById('rsvpPanel');
+    rsvpToggle.addEventListener('click', () => {
+      const expanded = rsvpToggle.getAttribute('aria-expanded') === 'true';
+      rsvpToggle.setAttribute('aria-expanded', String(!expanded));
+      rsvpPanel.classList.toggle('is-open', !expanded);
+    });
+
+    document.querySelectorAll('[data-rsvp]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.getElementById('attendance').value = button.dataset.rsvp;
+        document.querySelectorAll('[data-rsvp]').forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
+      });
+    });
+    document.querySelectorAll('[data-plus]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.getElementById('plusOne').value = button.dataset.plus;
+        document.querySelectorAll('[data-plus]').forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
+      });
+    });
+
+    document.getElementById('rsvpForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const attendance = document.getElementById('attendance').value;
+      if (!attendance) {
+        document.getElementById('rsvpStatus').textContent = 'Please choose whether you can attend.';
+        return;
+      }
+      const entry = Object.fromEntries(new FormData(form));
+      entry.attendance = attendance;
+      entry.plusOne = document.getElementById('plusOne').value;
+      const responses = JSON.parse(localStorage.getItem('omarHayatRsvps') || '[]');
+      responses.push(entry);
+      localStorage.setItem('omarHayatRsvps', JSON.stringify(responses));
+      document.getElementById('rsvpStatus').textContent = 'Thank you. Your RSVP is saved on this device.';
+      form.reset();
+      document.getElementById('attendance').value = '';
+      document.getElementById('plusOne').value = '';
+      document.querySelectorAll('[data-rsvp], [data-plus]').forEach((button) => button.setAttribute('aria-pressed', 'false'));
+    });
+
+    document.querySelectorAll('[data-dialog]').forEach((button) => {
+      button.addEventListener('click', () => document.getElementById(button.dataset.dialog).showModal());
+    });
+    document.querySelectorAll('dialog .dialog-close').forEach((button) => {
+      button.addEventListener('click', () => button.closest('dialog').close());
+    });
+    document.querySelectorAll('dialog').forEach((dialog) => {
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+    });
+    document.querySelectorAll('[data-local-form]').forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const category = form.dataset.localForm;
+        const entries = JSON.parse(localStorage.getItem(`omarHayat-${category}`) || '[]');
+        entries.push(Object.fromEntries(new FormData(form)));
+        localStorage.setItem(`omarHayat-${category}`, JSON.stringify(entries));
+        form.querySelector('[role="status"]').textContent = 'Thank you. Your note is saved on this device.';
+        form.reset();
+      });
+    });
+  </script>
+</body>
+</html>
